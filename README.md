@@ -47,3 +47,179 @@ Pay special attention to what data the frontend is expecting from each API respo
 By making notes ahead of time, you will practice the core skill of being able to read and understand code and will have a simple plan to follow to build out the endpoints of your backend API.
 
 > View the [Frontend README](./frontend/README.md) for more details.
+
+## API Reference
+
+### Getting Started
+- Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration. 
+- Authentication: This version of the application does not require authentication or API keys. 
+
+### Error Handling
+Errors are returned as JSON objects in the following format:
+```
+{
+    "success": False, 
+    "error": 400,
+    "message": "bad request"
+}
+```
+The API will return three error types when requests fail:
+- 400: Bad Request
+- 404: Resource Not Found
+- 422: Not Processable 
+- 500: Internal Server Error
+
+### Endpoints 
+#### GET /categories 
+
+- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+- Request Arguments: None
+- Returns: A list with all existing categories and success value
+
+``` 
+  {
+    'categories': { 
+      '1' : "Science",
+      '2' : "Art",
+      '3' : "Geography",
+      '4' : "History",
+      '5' : "Entertainment",
+      '6' : "Sports" 
+    },
+    "success": true,
+}
+```
+
+#### GET /questions?page=1
+
+- Fetches a paginated dictionary of questions
+- Request Arguments: page - Integer
+- Returns: A list with 10 questions, the total number of questions and all categories
+
+``` 
+{
+    'questions': [
+        {
+            'id': 1,
+            'question': 'This is a question',
+            'answer': 'This is an answer',
+            'difficulty': 5,
+            'category': 2
+        },
+    ],
+    'totalQuestions':00,
+    'categories': { 
+      '1' : "Science",
+      '2' : "Art",
+      '3' : "Geography",
+      '4' : "History",
+      '5' : "Entertainment",
+      '6' : "Sports" },
+    'currentCategory': 'History'
+}
+```
+#### DELETE /questions/${id}
+
+- Deletes a single question based on provided ID
+- Request Arguments: id - Integer
+- Returns: A success variable and the id of the deleted question
+
+``` 
+{
+    'success': true,
+    'deleted': 2
+}
+```
+#### GET /categories/${category_id}/questions
+
+- Gets all questions from one category based on the provided category id
+- Request Argument: category_id - Integer
+- Returns: 
+
+```
+{
+    'questions': [
+        {
+            'id': 1,
+            'question': 'This is a question',
+            'answer': 'This is an answer',
+            'difficulty': 5,
+            'category': 4
+        },
+    ],
+    'totalQuestions': 100,
+    'currentCategory': 'History'
+}
+```
+
+#### POST /questions
+
+- Post request to create a new question
+- Request Body:
+```
+{
+    'question':  'Heres a new question string',
+    'answer':  'Heres a new answer string',
+    'difficulty': 1,
+    'category': 3,
+}
+```
+- Returns: 
+
+```
+{
+    'success': true
+}
+```
+
+#### POST /questions
+
+- Post request to search for a question
+- Request Body:
+```
+{
+    'searchTerm': 'Tom Hanks'
+}
+```
+- Returns: 
+
+```
+{
+    'success': true,
+    'questions': [
+        {
+            'id': 1,
+            'question': 'This is a question',
+            'answer': 'This is an answer',
+            'difficulty': 5,
+            'category': 5
+        },
+    ],
+    'totalQuestions': 100,
+    'currentCategory': 'Entertainment'
+}
+```
+
+#### POST /quizzes
+
+- Sends a post request in order to get the next question
+- Request Body:
+```
+{
+    'previous_questions': [1, 4, 20, 15]
+    quiz_category': 'current category'
+ }
+```
+- Returns: 
+
+```
+{
+    'question': {
+        'id': 1,
+        'question': 'This is a question',
+        'answer': 'This is an answer',
+        'difficulty': 5,
+        'category': 4
+    }
+}
+```
